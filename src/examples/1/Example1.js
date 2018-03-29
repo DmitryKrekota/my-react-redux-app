@@ -26,7 +26,7 @@ class Example1 extends React.Component {
     render() {
         return (
             <div className="row justify-content-center">
-                <button onClick={this.runExample.bind(this)}>Click me 🍕</button>
+                <button onClick={this.runExample.bind(this)}>Click me and see console 🍕</button>
             </div>
         )
     }
