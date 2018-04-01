@@ -1,14 +1,10 @@
 import React from 'react'
 import {render} from 'react-dom'
-import {createStore} from 'redux'
+import {connect} from 'react-redux'
 
-class Example2 extends React.Component {
+class Example3 extends React.Component {
     constructor() {
         super()
-        this.store = createStore(this.playlist.bind(this))
-        this.store.subscribe(() => {
-            this.forceUpdate()
-        })
         this.state = {
             inputTrack: ''
         }
@@ -18,23 +14,11 @@ class Example2 extends React.Component {
         this.setState({inputTrack: event.target.value})
     }
 
-    playlist(state = [], action) {
-        let result
-
-        if (action.type === 'ADD_TRACK') {
-            result = [...state, action.payload]
-        } else {
-            result = state
-        }
-
-        return result
-    }
-
     addTrack() {
         if (!this.state.inputTrack) {
             return
         }
-        this.store.dispatch({type: 'ADD_TRACK', payload: this.state.inputTrack})
+        this.props.onAddTrack(this.state.inputTrack)
         this.setState({inputTrack: ''})
     }
 
@@ -52,10 +36,17 @@ class Example2 extends React.Component {
                 <div className="input-group">
                     <button onClick={this.addTrack.bind(this)}>Add track 🎶</button>
                 </div>
-                <ul>{this.store.getState().map((item, i) => <li key={i}>{item}</li>)}</ul>
+                <ul>{this.props.testStore.map((item, i) => <li key={i}>{item}</li>)}</ul>
             </div>
         )
     }
 }
 
-export default Example2
+export default connect(
+    state => ({testStore: state}),
+    dispatch => ({
+        onAddTrack: trackName => {
+            dispatch({type: 'ADD_TRACK', payload: trackName})
+        }
+    })
+)(Example3)
